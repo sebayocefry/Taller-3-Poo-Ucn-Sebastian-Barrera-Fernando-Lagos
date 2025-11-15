@@ -17,7 +17,7 @@ public class Feature extends Tarea{
 	@Override
 	public void aceptar(Visitor v) {
 		// TODO Auto-generated method stub
-		
+		v.visitar(this);
 	}
 
 }
