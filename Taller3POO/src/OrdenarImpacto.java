@@ -24,6 +24,7 @@ public class OrdenarImpacto implements PrioridadStrategy{
 	public void ordenarTareas(ArrayList<Tarea> listaTareas) {
 		// TODO Auto-generated method stub
 		listaTareas.sort((t1,t2)-> Integer.compare((impacto(t1.getTipoTarea())), impacto(t1.getTipoTarea())));
+		System.out.println(listaTareas);
 	}
 
 	

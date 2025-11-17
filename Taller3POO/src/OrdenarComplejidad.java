@@ -18,6 +18,7 @@ public class OrdenarComplejidad implements PrioridadStrategy{
 	public void ordenarTareas(ArrayList<Tarea> listaTareas) {
 		// TODO Auto-generated method stub
 		listaTareas.sort((t1,t2)-> Integer.compare(complejidad(t1.getComplejidadTarea()),complejidad(t2.getComplejidadTarea())));
+		System.out.println(listaTareas);
 	}
 
 }

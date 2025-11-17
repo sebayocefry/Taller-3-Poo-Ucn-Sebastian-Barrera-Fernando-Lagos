@@ -10,6 +10,7 @@ public class EstrategiaFechas implements PrioridadStrategy {
 		// se que no poner una funcion Integer, Float etc podria provocarme algun error de overflock pero como es una
 		//variable LocalDate no deberia tener mayores problemas por el tamano de numeros
 		listaTareas.sort((t1,t2)->t1.getFechaTarea().compareTo(t2.getFechaTarea()));
+		System.out.println(listaTareas);
 	}
 
 }

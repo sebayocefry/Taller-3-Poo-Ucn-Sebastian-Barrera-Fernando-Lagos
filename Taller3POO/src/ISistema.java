@@ -9,7 +9,8 @@ public interface ISistema {
 	public void agregarProyecto(String idProyecto, String nombreProyecto, String responsable);
 	public void eliminarProyecto(String idProyecto);
 	public void agregarTarea(String idProyecto,String idTarea,String tipoTarea, String descripcionTarea, String estadoTarea,
-			Usuario responsableTarea, String complejidadTarea, LocalDate fechaTarea);
+			String responsableTarea, String complejidadTarea, String fechaTarea);
+	public LocalDate convertirFecha(String fecha);
 	public void eliminarTarea(String idProyecto, String idTarea);
 	public PrioridadStrategy buscarEstrategia(int op);
 	public void asignarPrioridades(String idProyecto, int op);
@@ -22,12 +23,13 @@ public interface ISistema {
 	
 	
 	public void verProyectos();
+	public void verLimitado();
 	public void verTareas();
 	public void actualizarEstadoTarea( String idTarea,String estadoActualizar);
 	public void aplicarVisitorEnTareas();
 	
 	
 	public Usuario buscarUsuario(String name);
-	public boolean login(String user, String pass);
+	public Usuario login(String user, String pass);
 	
 }

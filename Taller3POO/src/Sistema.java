@@ -1,5 +1,8 @@
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
@@ -76,6 +79,21 @@ public class Sistema implements ISistema {
 		}
 
 	}
+	
+	@Override
+	public void verLimitado() {
+		// TODO Auto-generated method stub
+		for (Proyecto proyecto : listaProyectos) {
+			System.out.println("ID del proyecto:"+proyecto.getNombreProyecto());
+			System.out.println("Responsable: "+ proyecto.getResponsableProyecto());
+			for (Tarea t : proyecto.getListaTareas()) {
+				System.out.println(t.getTipoTarea());
+				System.out.println(t.getEstadoTarea());
+			}
+			
+		}
+
+	}
 	//  metodo de prueba
 	public void verU() {
 		for (Usuario u : listaUsuarios) {
@@ -88,11 +106,13 @@ public class Sistema implements ISistema {
 	public void agregarProyecto(String idProyecto, String nombreProyecto, String responsable) {
 		// TODO Auto-generated method stub
 		Proyecto proyectoNuevo = new Proyecto(idProyecto, nombreProyecto, responsable);
-		if(proyectoNuevo!=null) {
+		Usuario usuario = buscarUsuario(responsable);
+		if(proyectoNuevo!=null && usuario!=null) {
 			listaProyectos.add(proyectoNuevo);
-		}else {
-			System.out.println("error");
+			return;
 		}
+		System.out.println("error");
+		
 		
 	}
 
@@ -105,10 +125,12 @@ public class Sistema implements ISistema {
 
 	@Override
 	public void agregarTarea(String idProyecto, String idTarea, String tipoTarea, String descripcionTarea,
-			String estadoTarea, Usuario responsableTarea, String complejidadTarea, LocalDate fechaTarea) {
+			String estadoTarea, String responsableTarea, String complejidadTarea, String fechaTarea) {
 		// TODO Auto-generated method stub
+		LocalDate date = convertirFecha(fechaTarea);
+		Usuario responsable = buscarUsuario(responsableTarea);
 		
-		Tarea nuevaTarea = TareasFactory.crearTarea(idProyecto, idTarea, tipoTarea, descripcionTarea, estadoTarea, responsableTarea, complejidadTarea, fechaTarea);
+		Tarea nuevaTarea = TareasFactory.crearTarea(idProyecto, idTarea, tipoTarea, descripcionTarea, estadoTarea, responsable, complejidadTarea, date);
 		Proyecto proyecto = buscarProyecto(idProyecto);
 		if(proyecto!=null && nuevaTarea != null) {
 			proyecto.getListaTareas().add(nuevaTarea);
@@ -157,9 +179,44 @@ public class Sistema implements ISistema {
 	@Override
 	public void generarTxt() {
 		// TODO Auto-generated method stub
+		 try {
+		        FileWriter fw = new FileWriter("reporte.txt");
+		        PrintWriter pw = new PrintWriter(fw);
+
+		        for (Proyecto p : listaProyectos) {
+
+		            pw.println("===== Proyecto " + p.getIdProyecto() + " =====");
+		            pw.println("Nombre: " + p.getNombreProyecto());
+		            pw.println("Responsable: " + p.getResponsableProyecto());
+		            pw.println();
+		            pw.println("--- Tareas ---");
+
+		            for (Tarea t : p.getListaTareas()) {
+		                pw.println("ID: " + t.getIdTarea());
+		                pw.println("Tipo: " + t.getTipoTarea());
+		                pw.println("Estado: " + t.getEstadoTarea());
+		                pw.println("Responsable: " + 
+		                    (t.getResponsableTarea() != null ? 
+		                    t.getResponsableTarea().getNombreUsuario() : "Sin asignar"));
+		                pw.println("Fecha: " + t.getFechaTarea());
+		                pw.println("Complejidad: " + t.getComplejidadTarea());
+		                pw.println();
+		            }
+
+		            pw.println("------------------------");
+		            pw.println();
+		        }
+
+		        pw.close();
+		        System.out.println("Reporte generado con éxito.");
+
+		    } catch (Exception e) {
+		        System.out.println("Error al generar el archivo: " + e.getMessage());
+		    }
 
 	}
 
+	
 	@Override
 	public void verProyectos() {
 		// TODO Auto-generated method stub
@@ -173,7 +230,7 @@ public class Sistema implements ISistema {
 		System.out.println("Proyectos asignados a "+ uLogueado.getNombreUsuario());
 		for (Proyecto proyecto : listaProyectos) {
 			if(proyecto.getResponsableProyecto().equals(NombreU)) {
-				proyecto.toString();
+				System.out.println(proyecto);
 			}
 		}
 	}
@@ -189,8 +246,10 @@ public class Sistema implements ISistema {
 		System.out.println("Tareas asignas a "+ uLogueado.getNombreUsuario());
 		for (Proyecto proyecto : listaProyectos) {
 			for (Tarea tarea : proyecto.getListaTareas()) {
-				if(tarea.getResponsableTarea()!=null && tarea.getResponsableTarea().equals(uLogueado));
-				System.out.println(tarea.toString());
+				if(tarea.getResponsableTarea()!=null && tarea.getResponsableTarea().equals(uLogueado)) {
+					System.out.println(tarea);
+				}
+				
 			}
 		}
 		
@@ -200,7 +259,22 @@ public class Sistema implements ISistema {
 	public void actualizarEstadoTarea(String idTarea,String estadoActualizar) {
 		// TODO Auto-generated method stub
 		Tarea t = buscarTarea(idTarea);
+		
+		if(t == null) {
+			return;
+		}
+		
+		if(estadoActualizar.equalsIgnoreCase("pendiente")) {
+			System.out.println("Las tareas van en progreso, no en retroceso");
+			return;
+		}
+		
+		if(t.getEstadoTarea().equalsIgnoreCase(estadoActualizar)) {
+			System.out.println("Las tareas van en progreso, no en empate");
+			return;
+		}
 		t.setEstadoTarea(estadoActualizar);
+		System.out.println("La tarea "+t.getIdTarea() +" del proyecto "+t.getIdProyecto()+" actualizo su estado actual a "+t.getEstadoTarea());
 		
 
 	}
@@ -252,15 +326,24 @@ public class Sistema implements ISistema {
 	}
 
 	@Override
-	public boolean login(String user, String pass) {
+	public Usuario login(String user, String pass) {
 		// TODO Auto-generated method stub
 		for (Usuario u : listaUsuarios) {
 			if(u.getNombreUsuario().equals(user)&&u.getPassword().equals(pass)) {
 				this.uLogueado = u;
-				return true;
+				return u;
 			}
 		}
-		return false;
+		return null;
+	}
+
+	@Override
+	public LocalDate convertirFecha(String fecha) {
+		// TODO Auto-generated method stub
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date = LocalDate.parse(fecha,formato);
+		
+		return date;
 	}
 
 	
