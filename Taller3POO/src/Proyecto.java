@@ -5,6 +5,11 @@ public class Proyecto {
 	private String nombreProyecto;
 	private String responsableProyecto;
 	private ArrayList<Tarea> listaTareas;
+	
+	// atributo para hacer de contexto la clase proyecto y no la sistema, 
+	//debido que queremos aplicar por proyecto y no todos los proyectos
+	private PrioridadStrategy miEstrategia;
+	
 	public Proyecto(String idProyecto, String nombreProyecto, String responsableProyecto) {
 		super();
 		this.idProyecto = idProyecto;
@@ -13,6 +18,20 @@ public class Proyecto {
 		this.listaTareas = new ArrayList<>();
 	}
 	
+	
+	public void aplicarEstrategia() {
+		if(miEstrategia!=null) {
+			miEstrategia.ordenarTareas(listaTareas);
+		}
+	}
+	
+	
+	
+	public void setMiEstrategia(PrioridadStrategy miEstrategia) {
+		this.miEstrategia = miEstrategia;
+	}
+
+
 	public void agregarTarea(Tarea t) {
 		listaTareas.add(t);
 	}

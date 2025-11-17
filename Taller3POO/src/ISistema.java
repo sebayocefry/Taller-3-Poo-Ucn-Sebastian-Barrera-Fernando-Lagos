@@ -11,7 +11,8 @@ public interface ISistema {
 	public void agregarTarea(String idProyecto,String idTarea,String tipoTarea, String descripcionTarea, String estadoTarea,
 			Usuario responsableTarea, String complejidadTarea, LocalDate fechaTarea);
 	public void eliminarTarea(String idProyecto, String idTarea);
-	public void asignarPrioridades();
+	public PrioridadStrategy buscarEstrategia(int op);
+	public void asignarPrioridades(String idProyecto, int op);
 	
 	//esto lo hago normal y sin visitor porque piden guardar proyectos y no tareas
 	public void generarTxt();
@@ -22,9 +23,11 @@ public interface ISistema {
 	
 	public void verProyectos();
 	public void verTareas();
-	public void actualizarEstadoTarea();
-	public void aplicarVisitorEnTareas(Usuario colaborador, Visitor visitor);
+	public void actualizarEstadoTarea( String idTarea,String estadoActualizar);
+	public void aplicarVisitorEnTareas();
 	
 	
 	public Usuario buscarUsuario(String name);
+	public boolean login(String user, String pass);
+	
 }

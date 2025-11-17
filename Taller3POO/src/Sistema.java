@@ -12,6 +12,10 @@ public class Sistema implements ISistema {
 	private ArrayList<Usuario> listaUsuarios = new ArrayList<>();
 	private ArrayList<Proyecto> listaProyectos = new ArrayList<>();
 	
+	// lo uso para poder acceder a las tareas del usuario logueado
+	
+	private Usuario uLogueado;
+	
 	//constructor privado para no poder instanciar desde afuera
 	
 	private Sistema() {}
@@ -23,6 +27,15 @@ public class Sistema implements ISistema {
 		return instancia;
 	}
 	
+	
+	public Usuario getuLogueado() {
+		return uLogueado;
+	}
+
+	public void setuLogueado(Usuario uLogueado) {
+		this.uLogueado = uLogueado;
+	}
+
 	@Override
 	public void cargarUsuarios(String[] partes) {
 		// TODO Auto-generated method stub
@@ -104,7 +117,7 @@ public class Sistema implements ISistema {
 		
 
 	}
-
+	
 	@Override
 	public void eliminarTarea(String idProyecto, String idTarea) {
 		// TODO Auto-generated method stub
@@ -114,11 +127,31 @@ public class Sistema implements ISistema {
 			proyecto.getListaTareas().remove(tarea);
 		}
 	}
-
 	@Override
-	public void asignarPrioridades() {
+	public PrioridadStrategy buscarEstrategia(int op) {
+		if(op==1) {
+			return new EstrategiaFechas();
+		}
+		if(op==2) {
+			return new OrdenarImpacto();
+		}
+		if(op==3) {
+			return new OrdenarComplejidad();
+		}
+		System.out.println("Estrategia no encontrada");
+		return null;
+	}
+	
+	
+	@Override
+	public void asignarPrioridades(String idProyecto, int op) {
 		// TODO Auto-generated method stub
-		
+		Proyecto p = buscarProyecto(idProyecto);
+		PrioridadStrategy nuevaEstrategia = buscarEstrategia(op);
+		if(p!=null && nuevaEstrategia!=null) {
+			p.setMiEstrategia(nuevaEstrategia);
+			p.aplicarEstrategia();
+		}
 	}
 
 	@Override
@@ -131,24 +164,56 @@ public class Sistema implements ISistema {
 	public void verProyectos() {
 		// TODO Auto-generated method stub
 
+		Usuario Ulogueado = this.uLogueado;
+		 String NombreU = Ulogueado.getNombreUsuario();
+		if(uLogueado==null) {
+			System.out.println("No hay usuario logueado");
+			return;
+		}
+		System.out.println("Proyectos asignados a "+ uLogueado.getNombreUsuario());
+		for (Proyecto proyecto : listaProyectos) {
+			if(proyecto.getResponsableProyecto().equals(NombreU)) {
+				proyecto.toString();
+			}
+		}
 	}
 
 	@Override
 	public void verTareas() {
 		// TODO Auto-generated method stub
+		Usuario uLogueado = this.uLogueado;
+		if(uLogueado==null) {
+			System.out.println("No hay usuario logueado");
+			return;
+		}
+		System.out.println("Tareas asignas a "+ uLogueado.getNombreUsuario());
+		for (Proyecto proyecto : listaProyectos) {
+			for (Tarea tarea : proyecto.getListaTareas()) {
+				if(tarea.getResponsableTarea()!=null && tarea.getResponsableTarea().equals(uLogueado));
+				System.out.println(tarea.toString());
+			}
+		}
+		
+	}
+
+	@Override
+	public void actualizarEstadoTarea(String idTarea,String estadoActualizar) {
+		// TODO Auto-generated method stub
+		Tarea t = buscarTarea(idTarea);
+		t.setEstadoTarea(estadoActualizar);
+		
 
 	}
 
 	@Override
-	public void actualizarEstadoTarea() {
+	public void aplicarVisitorEnTareas() {
 		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void aplicarVisitorEnTareas(Usuario colaborador, Visitor visitor) {
-		// TODO Auto-generated method stub
-
+		Visitor v = new TareasVisitor();
+		for (Proyecto proyecto : listaProyectos) {
+			for(Tarea t : proyecto.getListaTareas()) {
+				t.aceptar(v);
+			}
+		}
 	}
 
 	@Override
@@ -186,20 +251,18 @@ public class Sistema implements ISistema {
 		return null;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@Override
+	public boolean login(String user, String pass) {
+		// TODO Auto-generated method stub
+		for (Usuario u : listaUsuarios) {
+			if(u.getNombreUsuario().equals(user)&&u.getPassword().equals(pass)) {
+				this.uLogueado = u;
+				return true;
+			}
+		}
+		return false;
+	}
+
 	
 	
 }
