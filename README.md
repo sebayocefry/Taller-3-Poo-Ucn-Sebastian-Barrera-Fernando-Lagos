@@ -63,3 +63,9 @@ Implementación: La interfaz Visitor define los métodos visitar() para cada tip
 Justificación: Este patrón permite agregar nuevas operaciones a una jerarquía de clases sin modificar esas clases. En este proyecto, TareasVisitor añade la capacidad de imprimir un análisis de impacto ("Afecta criticidad", "Impacta en estimación", etc.).
 
 Beneficio: Si mañana necesitamos una operación completamente nueva (ej. "CalcularCosteTarea"), podemos crear un CosteVisitor sin tener que añadir el método calcularCoste() a la clase Tarea y todas sus hijas. Esto mantiene las clases de tareas limpias, estables y centradas en su única responsabilidad.
+
+Diagrama UML:
+![image_alt](https://github.com/sebayocefry/Taller-3-Poo-Ucn-Sebastian-Barrera-Fernando-Lagos/blob/main/taller%203UML-2025-11-17-210756.png)
+
+Diagrama de dominio:
+![image_alt](https://github.com/sebayocefry/Taller-3-Poo-Ucn-Sebastian-Barrera-Fernando-Lagos/blob/main/taller%203%20poo%20diagrama%20dominio-2025-11-17-213649.png)
