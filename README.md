@@ -197,10 +197,3 @@ Aplicación completa de consola escrita en Java, diseñada para demostrar un uso
 📊 Diagrama de Dominio:
 
   ![image_alt](https://github.com/sebayocefry/Taller-3-Poo-Ucn-Sebastian-Barrera-Fernando-Lagos/blob/main/taller%203%20poo%20diagrama%20dominio-2025-11-17-213649.png)
-
-
-Diagrama UML:
-![image_alt](https://github.com/sebayocefry/Taller-3-Poo-Ucn-Sebastian-Barrera-Fernando-Lagos/blob/main/taller%203UML-2025-11-17-210756.png)
-
-Diagrama de dominio:
-![image_alt](https://github.com/sebayocefry/Taller-3-Poo-Ucn-Sebastian-Barrera-Fernando-Lagos/blob/main/taller%203%20poo%20diagrama%20dominio-2025-11-17-213649.png)
