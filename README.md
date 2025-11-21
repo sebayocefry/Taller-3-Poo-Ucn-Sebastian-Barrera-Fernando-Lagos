@@ -5,20 +5,20 @@ Aplicación completa de consola escrita en Java, diseñada para demostrar un uso
 
 📌 Índice:
 
-  1.Introducción
-  2.Características Principales
-  3.Roles del Sistema
-  4.Arquitectura del Sistema
-  5.Patrones de Diseño Implementados
-  6.Flujo General del Sistema
-  7.Diagramas UML
-  8.Requisitos
-  9.Ejecución
-  10.Estructura del Repositorio
-  11.Documentación
-  12.Mejoras Futuras
-  13.Contribuciones
-  14.Licencia
+1.Introducción
+2.Características Principales
+3.Roles del Sistema
+4.Arquitectura del Sistema
+5.Patrones de Diseño Implementados
+6.Flujo General del Sistema
+7.Diagramas UML
+8.Requisitos
+9.Ejecución
+10.Estructura del Repositorio
+11.Documentación
+12.Mejoras Futuras
+13.Contribuciones
+14.Licencia
 
 🟦 Introducción:
 
